@@ -1,6 +1,7 @@
 /* controlador principal del juego */
 const ControladorVisual = {
     busy: false, // evita que el jugador haga dos acciones al mismo tiempo
+    terminado: false, // bloquea la entrada una vez que la partida cerro
     cartaActual: null, // guarda la carta que esta en pantalla
     
     // textos e iconos para cuando te quedas en cero
@@ -31,19 +32,19 @@ const ControladorVisual = {
 
     // prepara la carta nueva en la pantalla
     renderizarCarta: function(carta) {
-        document.getElementById('npc-name').textContent = 'carta';
-        
         // actualiza la imagen real de la carta
         const imgElement = document.getElementById('ui-card-img');
-        
+
         // revisa si la carta tiene una imagen valida
         if (carta.img && carta.img !== "") {
             imgElement.src = carta.img; // carga la imagen de la base de datos
         } else {
             // imagen por defecto por seguridad si no hay ruta definida
-            imgElement.src = "/static/img/predeterminado.png"; 
+            imgElement.src = "/static/img/predeterminado.webp";
         }
-        
+        // la ilustracion acompaña al texto, no aporta informacion propia
+        imgElement.alt = '';
+
         this.actualizarTextoCarta('base');
         document.getElementById('log').textContent = '';
     },
@@ -54,14 +55,13 @@ const ControladorVisual = {
         const st = document.getElementById('situation-text');
         if (modo === 'izq') {
             st.textContent = '« ' + this.cartaActual.opcion_izq.texto;
-            st.style.color = '#8a8fa8';
         } else if (modo === 'der') {
             st.textContent = this.cartaActual.opcion_der.texto + ' »';
-            st.style.color = '#8a8fa8';
         } else {
             st.textContent = this.cartaActual.texto;
-            st.style.color = '#d0d2dc';
         }
+        // el color lo decide la hoja de estilos, aca solo se marca el modo
+        st.classList.toggle('previsualizando', modo !== 'base');
     },
 
     // actualiza las barras de vida, estudio, trabajo, etc.
@@ -111,29 +111,39 @@ const ControladorVisual = {
     // activa la pantalla de muerte
     ejecutarGameOver: function(statFatal, mensajeServidor) {
         this.ocultarDeltas();
-        
-        const title = statFatal ? this.mensajesDerrota[statFatal].title : 'fin del trayecto';
-        const msg = statFatal ? this.mensajesDerrota[statFatal].msg : mensajeServidor;
-        const icon = statFatal ? this.mensajesDerrota[statFatal].icon : '⏳';
+        // el overlay tapa el mouse, pero el teclado sigue llegando: hay que cortarlo aca
+        this.terminado = true;
+
+        // si el servidor informa una stat que el cliente no conoce, se usa el cierre generico
+        const derrota = statFatal ? this.mensajesDerrota[statFatal] : null;
+        const title = derrota ? derrota.title : 'fin del trayecto';
+        const msg = derrota ? derrota.msg : mensajeServidor;
+        const icon = derrota ? derrota.icon : '⏳';
 
         document.getElementById('go-icon').textContent = icon;
         document.getElementById('go-title').textContent = title;
         document.getElementById('go-msg').textContent = msg;
         
-        if (statFatal) {
+        if (derrota) {
             const labels = { salud: 'salud · 0%', intelecto: 'intelecto · 0%', laboral: 'laboral · 0%', social: 'social · 0%', dinero: 'dinero · ₲ 0' };
             document.getElementById('go-stat-label').textContent = labels[statFatal];
             document.getElementById('row-' + statFatal).classList.add('bar-critical');
         } else {
             document.getElementById('go-stat-label').textContent = "equilibrio temporal";
         }
-        
-        setTimeout(() => document.getElementById('gameover-overlay').classList.add('active'), 500);
+
+        const overlay = document.getElementById('gameover-overlay');
+        setTimeout(() => {
+            overlay.classList.add('active');
+            overlay.setAttribute('aria-hidden', 'false');
+            // lleva el foco al boton de reinicio para poder seguir sin mouse
+            document.getElementById('go-restart').focus();
+        }, 500);
     },
 
     // envia la decision al servidor y procesa lo que pasa despues
     ejecutarSwipe: function(dir) {
-        if (this.busy || !this.cartaActual) return;
+        if (this.busy || this.terminado || !this.cartaActual) return;
         this.busy = true; // bloquea controles
         
         const ci = document.getElementById('card-inner');
@@ -150,7 +160,6 @@ const ControladorVisual = {
         })
         .then(res => res.json())
         .then(resultadoBackend => {
-            console.log("paquete del servidor:", resultadoBackend);
             setTimeout(() => {
                 this.renderizarStats(resultadoBackend.stats);
                 this.mostrarDeltas(resultadoBackend.efectos); 
@@ -185,11 +194,13 @@ const ControladorVisual = {
                     
                     // activa la pantalla clonada
                     panicOverlay.classList.add('active');
+                    panicOverlay.setAttribute('aria-hidden', 'false');
                     gameDiv.classList.add('stress-tremble', 'stress-vignette');
 
                     // la oculta despues de 4 segundos para seguir jugando
                     setTimeout(() => {
                         panicOverlay.classList.remove('active');
+                        panicOverlay.setAttribute('aria-hidden', 'true');
                         gameDiv.classList.remove('stress-tremble', 'stress-vignette');
                     }, 4000);
                 }
@@ -215,7 +226,7 @@ const ControladorVisual = {
         const ci = document.getElementById('card-inner');
 
         // detecta cuando haces clic o tocas la carta
-        const ds = (x) => { if (!this.busy) { drag = true; sx = x; } };
+        const ds = (x) => { if (!this.busy && !this.terminado) { drag = true; sx = x; } };
         
         // detecta cuando arrastras la carta
         const dm = (x) => {
@@ -272,6 +283,12 @@ const ControladorVisual = {
         
         btnDer.addEventListener('mouseenter', () => { if(!this.busy) this.actualizarTextoCarta('der'); });
         btnDer.addEventListener('mouseleave', () => { if(!this.busy) this.actualizarTextoCarta('base'); });
+
+        // permite jugar con el teclado, sin mouse ni pantalla tactil
+        window.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') this.ejecutarSwipe('izq');
+            else if (e.key === 'ArrowRight') this.ejecutarSwipe('der');
+        });
     }
 };
 
@@ -288,11 +305,20 @@ document.addEventListener('DOMContentLoaded', () => {
             for (const [nombre, datos] of Object.entries(clases)) {
                 const btn = document.createElement('button');
                 btn.className = 'btn-clase';
+                btn.type = 'button';
+                btn.setAttribute('role', 'listitem');
                 btn.onclick = () => elegirClase(nombre);
-                btn.innerHTML = `
-                    <span style="font-weight: bold; font-size: 22px; color: #c8cad4;">${nombre}</span>
-                    <span class="clase-desc">${datos.descripcion}</span>
-                `;
+
+                // se arma con nodos de texto para no interpretar el contenido como html
+                const titulo = document.createElement('span');
+                titulo.className = 'clase-nombre';
+                titulo.textContent = nombre;
+
+                const descripcion = document.createElement('span');
+                descripcion.className = 'clase-desc';
+                descripcion.textContent = datos.descripcion;
+
+                btn.append(titulo, descripcion);
                 container.appendChild(btn);
             }
         });

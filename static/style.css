@@ -1,33 +1,123 @@
-/* reset de margenes y modelo de caja */
-* {
+/* ==========================================================================
+   pathraguay - hoja de estilos
+
+   sistema tipografico de una sola familia. archivo cubre los cuatro roles
+   variando peso y ancho en vez de mezclar fuentes: titulares en negra
+   expandida, narrativa en regular, hud en estrecha versalita y controles en
+   seminegra. la consistencia sale de la construccion, no de la disciplina.
+
+   secciones: tokens, reset, layout, inicio, hud, carta, superpuestos,
+   estres, adaptaciones.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* superficies. tinta, de la mas profunda a la mas cercana */
+  --tinta-900: #0b0d12;
+  --tinta-800: #12151c;
+  --tinta-700: #191d26;
+  --tinta-600: #232833;
+  --tinta-500: #2f3542;
+
+  /* texto. papel calido, no gris azulado */
+  --papel-100: #f3f0e9;
+  --papel-300: #c2beb4;
+  --papel-500: #86837b;
+  --papel-700: #55534d;
+
+  /* acento unico, tipo sello de tramite. se usa poco a proposito */
+  --sello: #d9553c;
+  --sello-tenue: rgba(217, 85, 60, 0.14);
+
+  /* atributos. misma luminosidad y saturacion contenida, para que se lean
+     como un sistema y no como cinco colores sueltos */
+  --salud: #d9635e;
+  --salud-fondo: #34201f;
+  --intelecto: #5b9dc9;
+  --intelecto-fondo: #1a2632;
+  --laboral: #d69a3c;
+  --laboral-fondo: #322715;
+  --social: #b06fa8;
+  --social-fondo: #2b1c2a;
+  --dinero: #6fa86b;
+  --dinero-fondo: #1d2a1c;
+
+  /* tipografia */
+  --fuente: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* escala de espaciado */
+  --e1: 4px;
+  --e2: 8px;
+  --e3: 12px;
+  --e4: 16px;
+  --e5: 22px;
+  --e6: 32px;
+  --e7: 44px;
+
+  --radio: 14px;
+  --radio-chico: 8px;
+
+  /* ancho del tablero: fluido abajo, con tope arriba */
+  --ancho-juego: min(520px, 100vw - 2 * var(--e4));
+  --ancho-delta: 62px;
+
+  --transicion: 0.18s cubic-bezier(.4, 0, .2, 1);
+  --sombra-carta: 0 18px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* --------------------------------------------------------------------------
+   reset
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* configuracion del fondo y tipografia base */
 body {
-  background: #0a0c11;
-  font-family: 'Share Tech Mono', monospace;
+  background: var(--tinta-900);
+  color: var(--papel-300);
+  font-family: var(--fuente);
+  font-synthesis: none;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: var(--e4) 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* contenedor global del juego */
+:focus-visible {
+  outline: 2px solid var(--sello);
+  outline-offset: 3px;
+  border-radius: var(--e1);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+}
+
+/* --------------------------------------------------------------------------
+   contenedor general
+   -------------------------------------------------------------------------- */
 #game {
-  background: #0a0c11;
-  min-height: 640px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: relative;
-  overflow: visible;
+  padding: var(--e4) 0;
 }
 
-/* efecto visual de lineas de escaneo */
+/* trama de fondo muy tenue, da textura sin llamar la atencion */
 #game::after {
   content: '';
   position: absolute;
@@ -35,579 +125,663 @@ body {
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.03) 2px,
-    rgba(0, 0, 0, 0.03) 4px
+    transparent 3px,
+    rgba(0, 0, 0, 0.035) 3px,
+    rgba(0, 0, 0, 0.035) 4px
   );
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
-/* pantalla superpuesta de inicio y seleccion de clase */
+/* --------------------------------------------------------------------------
+   pantalla de inicio
+   -------------------------------------------------------------------------- */
 .start-screen {
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 12, 17, 0.98);
-    backdrop-filter: blur(6px);
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    overflow: visible;
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 13, 18, 0.97);
+  backdrop-filter: blur(10px);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e6);
+  padding: var(--e5) var(--e4);
 }
 
-/* titulo del menu de inicio */
+/* marca del juego, sobre el titulo */
+.start-marca {
+  font-size: 11px;
+  font-weight: 700;
+  font-stretch: 78%;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--sello);
+  display: flex;
+  align-items: center;
+  gap: var(--e3);
+}
+
+/* filetes a los costados de la marca */
+.start-marca::before,
+.start-marca::after {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
 .start-title {
-    color: #e8e6f0;
-    font-family: 'IM Fell English', Georgia, serif;
-    font-size: 42px;
-    font-style: italic;
-    text-align: center;
+  font-size: clamp(30px, 8.5vw, 44px);
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--papel-100);
+  text-align: center;
+  text-wrap: balance;
+  margin-top: calc(-1 * var(--e4));
 }
 
-/* caja contenedora de los botones de clase */
 .clases-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 85%;
-    max-width: 500px;
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e3);
+  width: 100%;
+  max-width: 430px;
+  max-height: 58vh;
+  overflow-y: auto;
+  padding-right: var(--e2);
+  scrollbar-width: thin;
+  scrollbar-color: var(--tinta-600) transparent;
 }
 
-/* estilizacion de la barra de desplazamiento */
 .clases-container::-webkit-scrollbar { width: 4px; }
 .clases-container::-webkit-scrollbar-track { background: transparent; }
-.clases-container::-webkit-scrollbar-thumb { background: #22263a; border-radius: 4px; }
+.clases-container::-webkit-scrollbar-thumb { background: var(--tinta-600); border-radius: 4px; }
 
-/* botones dinamicos de seleccion de clase */
 .btn-clase {
-    background: #12151f;
-    color: #e8e6f0;
-    border: 1px solid #22263a;
-    padding: 14px 18px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s ease;
-    border-radius: 8px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  position: relative;
+  background: var(--tinta-800);
+  border: 1px solid var(--tinta-600);
+  border-radius: var(--radio-chico);
+  padding: var(--e4) var(--e5);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e1);
+  overflow: hidden;
+  transition: background var(--transicion), border-color var(--transicion), transform var(--transicion);
 }
 
-/* animacion al pasar el cursor por los botones de clase */
-.btn-clase:hover {
-    background: #1a1d28;
-    border-color: #6b7080;
-    transform: translateY(-2px);
+/* filete de acento que aparece al enfocar la opcion */
+.btn-clase::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--sello);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--transicion);
 }
 
-/* texto secundario descriptivo de la clase */
+.btn-clase:hover,
+.btn-clase:focus-visible {
+  background: var(--tinta-700);
+  border-color: var(--tinta-500);
+  transform: translateX(3px);
+}
+
+.btn-clase:hover::before,
+.btn-clase:focus-visible::before { transform: scaleY(1); }
+
+.btn-clase:active { transform: translateX(0); }
+
+.clase-nombre {
+  font-size: 17px;
+  font-weight: 700;
+  font-stretch: 105%;
+  letter-spacing: 0.01em;
+  color: var(--papel-100);
+}
+
 .clase-desc {
-    font-size: 14px;
-    color: #8a8fa8;
-    line-height: 1.4;
-    font-family: 'Share Tech Mono', monospace;
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--papel-500);
+  line-height: 1.5;
 }
 
-/* bloque principal de estadisticas del jugador */
+/* --------------------------------------------------------------------------
+   hud de atributos
+   -------------------------------------------------------------------------- */
 #stats-block {
   position: relative;
   z-index: 3;
-  width: 500px;
-  background: #12151f;
-  border: 1px solid #22263a;
+  width: var(--ancho-juego);
+  background: var(--tinta-800);
+  border: 1px solid var(--tinta-600);
   border-bottom: none;
-  border-radius: 12px 12px 0 0;
-  padding: 18px 20px 16px;
+  border-radius: var(--radio) var(--radio) 0 0;
+  padding: var(--e5) var(--e5) var(--e4);
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: var(--e2);
 }
 
-/* fila individual de estadistica */
 .stat-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  position: relative;
-  transition: opacity 0.25s;
+  gap: var(--e3);
 }
 
-/* icono emoji de la estadistica */
 .stat-icon {
-  font-size: 18px;
-  width: 24px;
+  font-size: 15px;
+  width: 20px;
   text-align: center;
   flex-shrink: 0;
-  transition: transform 0.25s, filter 0.25s;
+  opacity: 0.85;
 }
 
-/* nombre en texto de la estadistica */
 .stat-name {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  width: 90px;
-  flex-shrink: 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  font-stretch: 76%;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  width: 76px;
+  flex-shrink: 0;
+  color: var(--papel-500);
 }
 
-/* fondo oscuro de la barra de progreso */
 .stat-bar-bg {
   flex: 1;
-  height: 5px;
-  border-radius: 3px;
+  height: 6px;
+  border-radius: 999px;
   overflow: hidden;
+  min-width: 0;
 }
 
-/* relleno de color de la barra de progreso */
 .stat-bar-fill {
   height: 100%;
-  border-radius: 3px;
-  transition: width 0.6s cubic-bezier(.4, 0, .2, 1);
+  border-radius: 999px;
+  transition: width 0.65s cubic-bezier(.4, 0, .2, 1);
 }
 
-/* valor numerico porcentual de la estadistica */
 .stat-val {
   font-size: 12px;
-  width: 40px;
+  font-weight: 600;
+  font-stretch: 88%;
+  width: 38px;
   text-align: right;
   flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
-/* definicion de color para salud */
-.s-salud .stat-name, .s-salud .stat-val { color: #9b4dca; }
-.s-salud .stat-bar-bg { background: #2d1a38; }
-.s-salud .stat-bar-fill { background: #9b4dca; }
+/* color por atributo */
+.s-salud .stat-val { color: var(--salud); }
+.s-salud .stat-bar-bg { background: var(--salud-fondo); }
+.s-salud .stat-bar-fill { background: var(--salud); }
 
-/* definicion de color para intelecto */
-.s-intelecto .stat-name, .s-intelecto .stat-val { color: #3d8fe0; }
-.s-intelecto .stat-bar-bg { background: #161e2e; }
-.s-intelecto .stat-bar-fill { background: #3d8fe0; }
+.s-intelecto .stat-val { color: var(--intelecto); }
+.s-intelecto .stat-bar-bg { background: var(--intelecto-fondo); }
+.s-intelecto .stat-bar-fill { background: var(--intelecto); }
 
-/* definicion de color para laboral */
-.s-laboral .stat-name, .s-laboral .stat-val { color: #d4a017; }
-.s-laboral .stat-bar-bg { background: #2a2214; }
-.s-laboral .stat-bar-fill { background: #d4a017; }
+.s-laboral .stat-val { color: var(--laboral); }
+.s-laboral .stat-bar-bg { background: var(--laboral-fondo); }
+.s-laboral .stat-bar-fill { background: var(--laboral); }
 
-/* definicion de color para social */
-.s-social .stat-name, .s-social .stat-val { color: #e05599; }
-.s-social .stat-bar-bg { background: #2d1020; }
-.s-social .stat-bar-fill { background: #e05599; }
+.s-social .stat-val { color: var(--social); }
+.s-social .stat-bar-bg { background: var(--social-fondo); }
+.s-social .stat-bar-fill { background: var(--social); }
 
-/* definicion de color y formato para dinero */
-.s-dinero .stat-name { color: #2dbd6e; }
+/* el dinero no tiene techo: se muestra como cifra, separado por un filete */
+.s-dinero {
+  margin-top: var(--e2);
+  padding-top: var(--e3);
+  border-top: 1px solid var(--tinta-600);
+}
+
 .s-dinero .stat-bar-bg { display: none; }
+
 .s-dinero .stat-val {
-  color: #2dbd6e;
-  font-size: 15px;
+  color: var(--dinero);
+  font-size: 17px;
+  font-weight: 700;
+  font-stretch: 92%;
+  letter-spacing: -0.01em;
   width: auto;
   flex: 1;
   text-align: right;
-  font-weight: 700;
 }
 
-/* opacidad de estadisticas no afectadas durante hover */
-.stat-row.dimmed { opacity: 0.28; }
-
-/* brillo de icono en estadisticas afectadas durante hover */
-.stat-row.affected .stat-icon {
-  filter: drop-shadow(0 0 5px currentColor);
-  transform: scale(1.18);
-}
-
-/* colores intensificados durante hover */
-.stat-row.affected.s-salud .stat-bar-bg { background: #4a2060; }
-.stat-row.affected.s-salud .stat-bar-fill { background: #c070f0; }
-
-.stat-row.affected.s-intelecto .stat-bar-bg { background: #1e3050; }
-.stat-row.affected.s-intelecto .stat-bar-fill { background: #5aacff; }
-
-.stat-row.affected.s-laboral .stat-bar-bg { background: #3a2e10; }
-.stat-row.affected.s-laboral .stat-bar-fill { background: #f0c040; }
-.stat-row.affected.s-laboral .stat-name,
-.stat-row.affected.s-laboral .stat-val { color: #f0c040 !important; }
-
-.stat-row.affected.s-social .stat-bar-bg { background: #3d1030; }
-.stat-row.affected.s-social .stat-bar-fill { background: #f070b8; }
-
-.stat-row.affected.s-dinero .stat-val { color: #5de0a0; }
-
-/* numeros flotantes de impacto despues de decidir */
+/* indicador de variacion, en un lugar reservado dentro de la fila */
 .delta-badge {
-  position: absolute;
-  right: -45px;
-  top: 50%;
-  transform: translateY(-50%) translateX(-4px);
-  font-size: 13px;
+  width: var(--ancho-delta);
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  font-stretch: 84%;
+  font-variant-numeric: tabular-nums;
   opacity: 0;
+  transform: translateX(-8px);
   transition: opacity 0.3s, transform 0.3s;
   pointer-events: none;
   white-space: nowrap;
 }
 
-/* visibilidad de numeros flotantes */
 .delta-badge.show {
   opacity: 1;
-  transform: translateY(-50%) translateX(0);
+  transform: translateX(0);
 }
 
-/* colores de numeros flotantes positivo y negativo */
-.delta-badge.up { color: #2dbd6e; }
-.delta-badge.down { color: #e05555; }
+.delta-badge.up { color: var(--dinero); }
+.delta-badge.down { color: var(--salud); }
 
-/* posicionamiento especial del numero flotante de dinero */
-#d-dinero {
-  right: -85px;
-  font-size: 12px;
-}
+#d-dinero { font-size: 11.5px; }
 
-/* motor de animacion de pulso para barras alteradas */
 @keyframes bar-pulse {
-  0% { opacity: 1; }
-  35% { opacity: 0.3; }
+  0%   { opacity: 1; }
+  35%  { opacity: 0.35; }
   100% { opacity: 1; }
 }
 
-/* aplicacion de animacion de pulso */
-.bar-changing .stat-bar-fill {
-  animation: bar-pulse 0.55s ease;
-}
+.bar-changing .stat-bar-fill { animation: bar-pulse 0.55s ease; }
 
-/* motor de animacion parpadeante para game over */
 @keyframes blink-bar {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.2; }
+  50%      { opacity: 0.2; }
 }
 
-/* aplicacion de animacion parpadeante a barra critica */
-.bar-critical .stat-bar-fill {
-  animation: blink-bar 1s ease-in-out infinite;
-}
+.bar-critical .stat-bar-fill,
+.bar-critical .stat-name,
+.bar-critical .stat-val { animation: blink-bar 1s ease-in-out infinite; }
 
-/* linea divisoria entre secciones del hud */
 .hud-sep {
   height: 1px;
-  background: #22263a;
-  border-left: 1px solid #22263a;
-  border-right: 1px solid #22263a;
+  background: var(--tinta-600);
 }
 
-/* area contenedora del nodo interactivo (carta) */
+/* --------------------------------------------------------------------------
+   carta
+   -------------------------------------------------------------------------- */
 #card-area {
   position: relative;
   z-index: 2;
-  width: 500px;
+  width: var(--ancho-juego);
   overflow: hidden;
 }
 
-/* estructura movil de la carta */
 #card-inner {
   width: 100%;
   cursor: grab;
   transform-origin: bottom center;
   transition: transform 0.38s cubic-bezier(.4, 0, .2, 1), opacity 0.35s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+  filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.55));
 }
 
-/* cursor de arrastre activo */
 #card-inner:active { cursor: grabbing; }
 
-/* animacion de inclinacion lateral durante el arrastre */
-#card-inner.tilt-l { transform: rotate(-4deg) translateX(-14px); }
-#card-inner.tilt-r { transform: rotate(4deg)  translateX(14px); }
+#card-inner.tilt-l { transform: rotate(-3.5deg) translateX(-16px); }
+#card-inner.tilt-r { transform: rotate(3.5deg) translateX(16px); }
 
-/* fisicas de salida lateral al decidir */
-#card-inner.fly-l { transform: rotate(-26deg) translateX(-600px); opacity: 0; }
-#card-inner.fly-r { transform: rotate(26deg) translateX(600px); opacity: 0; }
+#card-inner.fly-l { transform: rotate(-24deg) translateX(-620px); opacity: 0; }
+#card-inner.fly-r { transform: rotate(24deg) translateX(620px); opacity: 0; }
 
-/* fisica de entrada inferior para nueva carta */
-#card-inner.entering {
-  animation: slideUp 0.32s cubic-bezier(.4, 0, .2, 1) forwards;
-}
+#card-inner.entering { animation: slideUp 0.34s cubic-bezier(.4, 0, .2, 1) forwards; }
 
-/* motor de animacion de entrada vertical */
 @keyframes slideUp {
-  from { transform: translateY(16px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from { transform: translateY(18px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 
-/* cabecera con el nombre de la carta */
+/* encabezado de la carta */
 #name-block {
-  background: #12151f;
-  border-left: 1px solid #22263a;
-  border-right: 1px solid #22263a;
-  padding: 8px 14px 6px;
+  background: var(--tinta-800);
+  border-left: 1px solid var(--tinta-600);
+  border-right: 1px solid var(--tinta-600);
+  padding: var(--e3) var(--e5) var(--e4);
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: var(--e1);
 }
 
-/* etiqueta fija npc */
+/* linea de contexto, con filete de acento a la izquierda */
 #npc-tag {
-  font-size: 12px;
+  position: relative;
+  padding-left: var(--e3);
+  font-size: 10px;
+  font-weight: 600;
+  font-stretch: 78%;
   letter-spacing: 0.2em;
-  color: #3a3f52;
   text-transform: uppercase;
-  flex-shrink: 0;
+  color: var(--papel-700);
+  line-height: 1.5;
 }
 
-/* texto dinamico del titulo de la carta */
+#npc-tag::before {
+  content: '';
+  position: absolute;
+  inset: 2px auto 2px 0;
+  width: 2px;
+  background: var(--sello);
+  opacity: 0.65;
+}
+
 #npc-name {
-  font-family: 'IM Fell English', Georgia, serif;
-  font-size: 20px;
-  font-style: italic;
-  color: #c8cad4;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--papel-300);
 }
 
-/* contenedor de la ilustracion visual */
+#npc-name:empty { display: none; }
+
 #card-image {
   width: 100%;
-  height: 260px;
-  background: #080b12; /* fondo oscuro por si la imagen tarda en cargar */
-  border-left: 1px solid #22263a;
-  border-right: 1px solid #22263a;
-  overflow: hidden; /* corta lo que sobre de la imagen */
-  display: flex; /* centra la imagen si es mas pequeÃ±a */
-  align-items: center;
-  justify-content: center;
+  aspect-ratio: 25 / 13;
+  background: var(--tinta-900);
+  border-left: 1px solid var(--tinta-600);
+  border-right: 1px solid var(--tinta-600);
+  overflow: hidden;
+  position: relative;
 }
 
-/* estilos para la etiqueta img real */
 #ui-card-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
-  object-position: center; /* centra el recorte de la foto */
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
-/* contenedor interactivo fusionado */
+/* velo inferior, para que la ilustracion entregue el foco al texto */
+#card-image::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 52%;
+  background: linear-gradient(to bottom, transparent, rgba(11, 13, 18, 0.72));
+  pointer-events: none;
+}
+
 #interactive-block {
-  background: #12151f;
-  border-left: 1px solid #22263a;
-  border-right: 1px solid #22263a;
-  border-bottom: 1px solid #22263a;
-  border-radius: 0 0 12px 12px;
+  background: var(--tinta-800);
+  border: 1px solid var(--tinta-600);
+  border-top: none;
+  border-radius: 0 0 var(--radio) var(--radio);
   display: flex;
   align-items: stretch;
-  min-height: 130px;
+  min-height: 140px;
 }
 
-/* botones laterales de navegacion (flechas) */
 .nav-btn {
-  width: 45px;
-  background: #0e0d12;
-  border: none;
-  color: #3a3f52;
-  font-size: 18px;
+  width: 52px;
+  background: var(--tinta-700);
+  color: var(--papel-500);
+  font-size: 15px;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
   flex-shrink: 0;
+  transition: background var(--transicion), color var(--transicion);
 }
 
-#btn-izq { border-right: 1px solid #22263a; border-radius: 0 0 0 12px; }
-#btn-der { border-left: 1px solid #22263a; border-radius: 0 0 12px 0; }
+#btn-izq { border-right: 1px solid var(--tinta-600); border-radius: 0 0 0 var(--radio); }
+#btn-der { border-left: 1px solid var(--tinta-600); border-radius: 0 0 var(--radio) 0; }
 
-.nav-btn:hover {
-  background: #161924;
-  color: #8a8fa8;
+.nav-btn:hover,
+.nav-btn:focus-visible {
+  background: var(--tinta-600);
+  color: var(--papel-100);
 }
 
-/* formato del texto central reactivo */
+.nav-btn:active { background: var(--tinta-500); }
+
 #situation-text {
   flex: 1;
-  padding: 20px 24px;
-  font-family: 'IM Fell English', Georgia, serif;
-  font-size: 18px;
-  font-style: italic;
-  color: #d0d2dc;
-  line-height: 1.5;
+  min-width: 0;
+  padding: var(--e5) var(--e5);
+  font-size: clamp(15px, 3.9vw, 16.5px);
+  font-weight: 400;
+  color: var(--papel-300);
+  line-height: 1.6;
   text-align: center;
+  text-wrap: pretty;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease;
+  transition: color var(--transicion);
 }
 
-/* registro de la accion tomada debajo de la carta */
+/* al asomar una opcion, el texto se distingue del enunciado de la carta */
+#situation-text.previsualizando {
+  color: var(--papel-100);
+  font-weight: 500;
+}
+
 #log {
-  width: 500px;
-  margin-top: 16px;
-  font-size: 14px;
-  color: #3a3f52;
-  letter-spacing: 0.06em;
+  width: var(--ancho-juego);
+  margin-top: var(--e4);
+  font-size: 11px;
+  font-weight: 500;
+  font-stretch: 84%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--papel-700);
   line-height: 1.6;
-  min-height: 22px;
+  min-height: 20px;
   text-align: center;
   position: relative;
   z-index: 2;
+  padding: 0 var(--e3);
 }
 
-/* capa de oscurecimiento absoluto para derrota */
-#gameover-overlay {
+/* --------------------------------------------------------------------------
+   superpuestos: fin de partida y alerta de estres
+   -------------------------------------------------------------------------- */
+#gameover-overlay,
+#panic-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 20;
+  padding: var(--e4);
+  background: rgba(0, 0, 0, 0);
   pointer-events: none;
+  z-index: 20;
   transition: background 0.6s;
 }
 
-/* activacion de opacidad y eventos al perder */
 #gameover-overlay.active {
-  background: rgba(0, 0, 0, 0.88);
+  background: rgba(6, 7, 10, 0.9);
   pointer-events: all;
 }
 
-/* caja central del mensaje de derrota */
-#gameover-box {
-  width: 420px;
-  background: #0f1118;
-  border: 1px solid #22263a;
-  border-radius: 12px;
-  padding: 40px 36px;
+#panic-overlay.active {
+  background: rgba(26, 6, 4, 0.9);
+  pointer-events: all;
+}
+
+#gameover-box,
+#panic-box {
+  width: 100%;
+  max-width: 400px;
+  background: var(--tinta-800);
+  border: 1px solid var(--tinta-600);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-carta);
+  padding: var(--e7) var(--e5) var(--e5);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: var(--e3);
   opacity: 0;
-  transform: translateY(20px) scale(0.96);
+  transform: translateY(18px) scale(0.97);
   transition: opacity 0.4s 0.3s, transform 0.4s 0.3s;
 }
 
-/* animacion de entrada para la caja de derrota */
-#gameover-overlay.active #gameover-box {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-/* icono principal del game over */
-#go-icon {
-  font-size: 56px;
-  line-height: 1;
-}
-
-/* titulo dramatico de resolucion */
-#go-title {
-  font-family: 'IM Fell English', Georgia, serif;
-  font-size: 32px;
-  font-style: italic;
-  color: #e8e6f0;
-  text-align: center;
-}
-
-/* linea decorativa separadora del game over */
-#go-rule {
-  width: 80%;
-  height: 1px;
-  background: #22263a;
-}
-
-/* mensaje narrativo de la razon de muerte */
-#go-msg {
-  font-family: 'IM Fell English', Georgia, serif;
-  font-size: 16px;
-  font-style: italic;
-  color: #8a8fa8;
-  line-height: 1.7;
-  text-align: center;
-}
-
-/* etiqueta mostrando la estadistica que causÃ³ la falla */
-#go-stat-label {
-  font-size: 8px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: 20px;
-  border: 1px solid #22263a;
-  color: #3a3f52;
-}
-
-/* boton de reseteo del bucle temporal */
-#go-restart {
-  margin-top: 4px;
-  width: 100%;
-  height: 50px;
-  background: transparent;
-  border: 1px solid #22263a;
-  border-radius: 8px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #6b7080;
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
-}
-
-/* animacion del boton de reseteo */
-#go-restart:hover {
-  border-color: #6b7080;
-  color: #c8cad4;
-  background: #161924;
-}
-
-/* ajuste condicional de pantalla para dispositivos moviles */
-@media (max-width: 360px) {
-  #stats-block, #card-area, #log { width: 100%; }
-  #card-area { overflow: visible; }
-}
-
-/* capa oscura para el panico */
-#panic-overlay {
-  position: absolute;
-  pointer-events: all;
-  inset: 0;
-  background: rgba(0, 0, 0, 0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-  pointer-events: none; /* deja hacer clic a traves de ella cuando esta invisible */
-  transition: background 0.4s;
-}
-
-/* fondo oscurecido con un ligero tono de alerta */
-#panic-overlay.active {
-  background: rgba(20, 5, 5, 0.88);
-}
-
-/* caja identica a la de derrota pero para estres */
 #panic-box {
-  width: 420px;
-  background: #0f1118;
-  border: 1px solid #e05555; /* borde rojo de alerta */
-  border-radius: 12px;
-  padding: 40px 36px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 100;
-  gap: 14px;
-  opacity: 0;
-  transform: translateY(20px) scale(0.96);
+  border-color: var(--sello);
   transition: opacity 0.4s, transform 0.4s;
 }
 
-/* animacion de entrada de la caja */
+#gameover-overlay.active #gameover-box,
 #panic-overlay.active #panic-box {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-/* textos y separadores del trauma */
-#panic-icon { font-size: 56px; line-height: 1; }
-#panic-title { font-family: 'IM Fell English', Georgia, serif; font-size: 28px; font-style: italic; color: #e05555; text-align: center; }
-#panic-rule { width: 80%; height: 1px; background: #e05555; opacity: 0.3; }
-#panic-msg { font-family: 'IM Fell English', Georgia, serif; font-size: 16px; font-style: italic; color: #d0d2dc; line-height: 1.7; text-align: center; }
+#go-icon,
+#panic-icon {
+  font-size: clamp(38px, 11vw, 46px);
+  line-height: 1;
+  margin-bottom: var(--e1);
+}
+
+#go-title,
+#panic-title {
+  font-size: clamp(23px, 6.5vw, 28px);
+  font-weight: 800;
+  font-stretch: 108%;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+  text-transform: uppercase;
+  color: var(--papel-100);
+  text-align: center;
+  text-wrap: balance;
+}
+
+#panic-title { color: var(--sello); }
+
+#go-rule,
+#panic-rule {
+  width: 48px;
+  height: 2px;
+  background: var(--sello);
+  border-radius: 2px;
+  margin: var(--e1) 0;
+}
+
+#go-msg,
+#panic-msg {
+  font-size: 14.5px;
+  font-weight: 400;
+  color: var(--papel-500);
+  line-height: 1.65;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+#panic-msg { color: var(--papel-300); }
+
+/* etiqueta del atributo que cerro la partida */
+#go-stat-label {
+  margin-top: var(--e1);
+  font-size: 9.5px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: var(--e1) var(--e3);
+  border-radius: 999px;
+  border: 1px solid var(--tinta-500);
+  background: var(--sello-tenue);
+  color: var(--papel-500);
+}
+
+#go-restart {
+  margin-top: var(--e4);
+  width: 100%;
+  min-height: 50px;
+  background: transparent;
+  border: 1px solid var(--tinta-500);
+  border-radius: var(--radio-chico);
+  font-size: 12px;
+  font-weight: 700;
+  font-stretch: 84%;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--papel-300);
+  cursor: pointer;
+  transition: border-color var(--transicion), color var(--transicion), background var(--transicion);
+}
+
+#go-restart:hover,
+#go-restart:focus-visible {
+  border-color: var(--sello);
+  background: var(--sello-tenue);
+  color: var(--papel-100);
+}
+
+/* --------------------------------------------------------------------------
+   estres: clases que aplica el cliente durante una alerta
+   -------------------------------------------------------------------------- */
+@keyframes tremble {
+  0%, 100% { transform: translate(0, 0); }
+  20%      { transform: translate(-2px, 1px); }
+  40%      { transform: translate(2px, -1px); }
+  60%      { transform: translate(-1px, -2px); }
+  80%      { transform: translate(1px, 2px); }
+}
+
+.stress-tremble { animation: tremble 0.28s linear infinite; }
+
+.stress-vignette::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  box-shadow: inset 0 0 120px 40px rgba(140, 20, 10, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   adaptaciones
+   -------------------------------------------------------------------------- */
+@media (max-width: 430px) {
+  :root {
+    --ancho-delta: 48px;
+    --e5: 17px;
+    --e7: 34px;
+  }
+
+  .stat-name { width: 64px; letter-spacing: 0.12em; }
+  .stat-val { width: 34px; }
+  .nav-btn { width: 44px; }
+  #interactive-block { min-height: 124px; }
+  .s-dinero .stat-val { font-size: 15px; }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --ancho-delta: 40px;
+    --e5: 14px;
+  }
+
+  .stat-name { width: 52px; letter-spacing: 0.08em; }
+  .stat-icon { display: none; }
+  .delta-badge { font-size: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  #card-inner.fly-l,
+  #card-inner.fly-r { transform: none; opacity: 0; }
+  .stress-tremble { animation: none; }
+}

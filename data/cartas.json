@@ -1,7 +1,7 @@
 {
     "inicio": {
         "texto": "Acabas de terminar el colegio, con solo 18 años ya la vida te exige tomar una decisión que forjará tu futuro... ¿Qué es lo que elegís priorizar: Tratar de mantener la beca de Itaipú o ascender en el mundo laboral? ¿Qué decisiones vas a tomar? ¿Qué estás dispuesto a sacrificar? ",
-        "img": "",
+        "img": "/static/img/dormitorio.webp",
         "opcion_izq": {
             "texto": "Priorizo mi formación académica",
             "siguiente_id": "1",
@@ -27,7 +27,7 @@
     },
     "1": {
         "texto": "Si bien es cierto que conseguiste la beca... La elección de tu carrera universitaria te sigue generando inquietud, las opiniones y las expectativas de los demás te pesan... ¿Hiciste lo correcto?",
-        "img": "",
+        "img": "/static/img/beca.webp",
         "opcion_izq": {
             "texto": "Sí, es lo que me apasiona. Encontraré la forma de salir adelante.",
             "siguiente_id": "1.1",
@@ -53,7 +53,7 @@
     },
     "1.1": {
         "texto": "La carrera que elegiste no tiene tanta salida laboral, sumado a eso tu red de contactos es inexistente. Las opciones de primer empleo son las siguientes:",
-        "img": "",
+        "img": "/static/img/elegir_trabajo.webp",
         "opcion_izq": {
             "texto": "Cajero en Biggie Express",
             "siguiente_id": "1.1.1",
@@ -79,7 +79,7 @@
     },
     "1.2": {
         "texto": "Tu carrera tiene salida laboral pero hay mucha competencia, así que las empresas hacen de todo para reducir costos.",
-        "img": "",
+        "img": "/static/img/biggie.webp",
         "opcion_izq": {
             "texto": "Trabajo legal pero sin remuneración de las horas extras",
             "siguiente_id": "1.2.1",
@@ -105,7 +105,7 @@
     },
     "1.1.1": {
         "texto": "Te pagan el salario mínimo en Biggie pero rebuscan de todas las maneras posibles para descontarte. Los horarios rotativos te están afectando bastante. Notas que te has vuelto un poco más irritable con la gente. ¿Tratas de aguantar un poco más o preferís salirte y buscar otro laburo?",
-        "img": "",
+        "img": "/static/img/biggie.webp",
         "opcion_izq": {
             "texto": "Me quedo",
             "siguiente_id": "1.1.1_1.1.2",
@@ -131,7 +131,7 @@
     },
     "1.1.2": {
         "texto": "Si bien en el Call Center tus horarios \"en teoría\" son fijos, te toca cubrir cuando la gente renuncia (Lo cual pasa seguido). Tenés estrés crónico y la fatiga ya se volvió una constante. Lo único bueno es que tenés 2 descansos de 45 minutos cada uno en la jornada de 10 horas, donde aprovechas para estudiar. ",
-        "img": "",
+        "img": "/static/img/callcenter.webp",
         "opcion_izq": {
             "texto": "Ya no aguanto...",
             "siguiente_id": "1.1.1_1.1.2",
@@ -157,7 +157,7 @@
     },
     "1.2.1": {
         "texto": "Todo lo que estudias en la uni lo aplicas en el trabajo. Estás en una institución sólida con más de 50 años de trayectoria. El salario es un poco más que el mínimo, tenés seguro privado e IPS, pero terminás trabajando en promedio +12 horas al día. Te planteas si vale la pena todo esto.",
-        "img": "",
+        "img": "/static/img/callcenter.webp",
         "opcion_izq": {
             "texto": "Hay que sudar la camiseta!",
             "siguiente_id": "1.1.2_1.2.1",
@@ -183,7 +183,7 @@
     },
     "1.2.2": {
         "texto": "Ya hace tiempo que trabajas en esta empresa, no hay registros de nada y la gente se maneja mediante favores y meriendas. Hace meses que te prometen el contrato que nunca llega. Aguantar el nepotismo es tu pan de cada día. Aprendiste a lidiar con la gente. Te es cómodo estar acá pero sabes que así no vas a escalar... ¿Qué vas a hacer?",
-        "img": "",
+        "img": "/static/img/oficina_noche.webp",
         "opcion_izq": {
             "texto": "Preparo mi CV para la primera oportunidad que aparezca",
             "siguiente_id": "1.2.1_1.2.2",
@@ -209,7 +209,7 @@
     },
     "1.1.1_1.1.2": {
         "texto": "El estrés y el cansancio te pasaron factura y terminaste enfermo, ahora estás en tu casa reposando y estás pensando qué podés hacer en cuanto a tu futuro...",
-        "img": "",
+        "img": "/static/img/enfermo.webp",
         "opcion_izq": {
             "texto": "Hacer lo que puedo, un día a la vez",
             "siguiente_id": "2",
@@ -235,7 +235,7 @@
     },
     "1.1.2_1.2.1": {
         "texto": "Una ex-compañera del trabajo te recomienda en la empresa en la que está. Decidís ir sin miedo, no podría ser peor que tu trabajo actual.",
-        "img": "",
+        "img": "/static/img/biggie.webp",
         "opcion_izq": {
             "texto": "Que sea lo que Dios quiera",
             "siguiente_id": "2",
@@ -261,7 +261,7 @@
     },
     "1.2.1_1.2.2": {
         "texto": "Esa mentalidad y la forma de plantear la situación no te ayudó... Terminaron despidiándote. ¿Qué vas a hacer a partir de ahora?",
-        "img": "",
+        "img": "/static/img/biggie.webp",
         "opcion_izq": {
             "texto": "Tomarme un descanso y pensar bien las cosas",
             "siguiente_id": "2",
@@ -287,7 +287,7 @@
     },
     "2": {
         "texto": "La vida te sonríe nuevamente... Las cosas se tornaron para bien. Conseguiste ese nuevo trabajo que tanto querías, ya trabajas de forma legal y no te explotan, podés incluso estudiar más.",
-        "img": "",
+        "img": "/static/img/trabajo_sonado.webp",
         "opcion_izq": {
             "texto": "Trabajar más y ascender",
             "siguiente_id": "3",
