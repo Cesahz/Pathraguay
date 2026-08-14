@@ -9,8 +9,9 @@
   <title>Pathraguay</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/style.css?v=3" />
+  <!-- archivo variable: un solo recurso cubre los cuatro roles tipograficos -->
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css?v=4" />
 </head>
 <body>
 
@@ -18,6 +19,7 @@
 
   <!-- seleccion de clase, se oculta al empezar la partida -->
   <section id="start-screen" class="start-screen" aria-labelledby="start-title">
+    <p class="start-marca">Pathraguay</p>
     <h1 id="start-title" class="start-title">Elige tu Origen</h1>
     <div id="clases-container" class="clases-container" role="list"></div>
   </section>
@@ -121,6 +123,6 @@
 
 </main>
 
-<script src="/static/app.js?v=3"></script>
+<script src="/static/app.js?v=4"></script>
 </body>
 </html>

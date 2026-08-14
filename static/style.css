@@ -1,61 +1,70 @@
 /* ==========================================================================
    pathraguay - hoja de estilos
-   organizada en: tokens, reset, layout, pantalla de inicio, hud, carta,
-   superposiciones y adaptaciones.
+
+   sistema tipografico de una sola familia. archivo cubre los cuatro roles
+   variando peso y ancho en vez de mezclar fuentes: titulares en negra
+   expandida, narrativa en regular, hud en estrecha versalita y controles en
+   seminegra. la consistencia sale de la construccion, no de la disciplina.
+
+   secciones: tokens, reset, layout, inicio, hud, carta, superpuestos,
+   estres, adaptaciones.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   tokens de diseño
+   tokens
    -------------------------------------------------------------------------- */
 :root {
-  /* superficies, de la mas profunda a la mas cercana */
-  --fondo: #0a0c11;
-  --superficie: #12151f;
-  --superficie-hundida: #0e0d12;
-  --superficie-elevada: #0f1118;
-  --hueco-imagen: #080b12;
+  /* superficies. tinta, de la mas profunda a la mas cercana */
+  --tinta-900: #0b0d12;
+  --tinta-800: #12151c;
+  --tinta-700: #191d26;
+  --tinta-600: #232833;
+  --tinta-500: #2f3542;
 
-  /* trazos y texto */
-  --borde: #22263a;
-  --borde-activo: #6b7080;
-  --texto: #d0d2dc;
-  --texto-fuerte: #e8e6f0;
-  --texto-suave: #8a8fa8;
-  --texto-tenue: #3a3f52;
+  /* texto. papel calido, no gris azulado */
+  --papel-100: #f3f0e9;
+  --papel-300: #c2beb4;
+  --papel-500: #86837b;
+  --papel-700: #55534d;
 
-  /* color por atributo */
-  --salud: #9b4dca;
-  --salud-fondo: #2d1a38;
-  --intelecto: #3d8fe0;
-  --intelecto-fondo: #161e2e;
-  --laboral: #d4a017;
-  --laboral-fondo: #2a2214;
-  --social: #e05599;
-  --social-fondo: #2d1020;
-  --dinero: #2dbd6e;
-  --alerta: #e05555;
+  /* acento unico, tipo sello de tramite. se usa poco a proposito */
+  --sello: #d9553c;
+  --sello-tenue: rgba(217, 85, 60, 0.14);
 
-  /* tipografias */
-  --serif: 'IM Fell English', Georgia, serif;
-  --mono: 'Share Tech Mono', ui-monospace, monospace;
+  /* atributos. misma luminosidad y saturacion contenida, para que se lean
+     como un sistema y no como cinco colores sueltos */
+  --salud: #d9635e;
+  --salud-fondo: #34201f;
+  --intelecto: #5b9dc9;
+  --intelecto-fondo: #1a2632;
+  --laboral: #d69a3c;
+  --laboral-fondo: #322715;
+  --social: #b06fa8;
+  --social-fondo: #2b1c2a;
+  --dinero: #6fa86b;
+  --dinero-fondo: #1d2a1c;
+
+  /* tipografia */
+  --fuente: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* escala de espaciado */
   --e1: 4px;
   --e2: 8px;
   --e3: 12px;
   --e4: 16px;
-  --e5: 24px;
-  --e6: 36px;
+  --e5: 22px;
+  --e6: 32px;
+  --e7: 44px;
 
-  --radio: 12px;
+  --radio: 14px;
   --radio-chico: 8px;
 
-  /* ancho del tablero: fluido en pantallas chicas, tope en grandes */
-  --ancho-juego: min(500px, 100vw - 2 * var(--e4));
-  /* espacio reservado a la derecha para los indicadores de variacion */
+  /* ancho del tablero: fluido abajo, con tope arriba */
+  --ancho-juego: min(520px, 100vw - 2 * var(--e4));
   --ancho-delta: 62px;
 
-  --transicion: 0.2s ease;
+  --transicion: 0.18s cubic-bezier(.4, 0, .2, 1);
+  --sombra-carta: 0 18px 50px -12px rgba(0, 0, 0, 0.7);
 }
 
 /* --------------------------------------------------------------------------
@@ -70,45 +79,45 @@
 }
 
 body {
-  background: var(--fondo);
-  color: var(--texto);
-  font-family: var(--mono);
+  background: var(--tinta-900);
+  color: var(--papel-300);
+  font-family: var(--fuente);
+  font-synthesis: none;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--e4) 0;
-  /* evita el rebote de seleccion al arrastrar la carta */
   -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* foco visible y consistente para navegacion por teclado */
 :focus-visible {
-  outline: 2px solid var(--borde-activo);
-  outline-offset: 2px;
+  outline: 2px solid var(--sello);
+  outline-offset: 3px;
   border-radius: var(--e1);
 }
 
 button {
   font: inherit;
   color: inherit;
+  background: none;
+  border: none;
 }
 
 /* --------------------------------------------------------------------------
    contenedor general
    -------------------------------------------------------------------------- */
 #game {
-  background: var(--fondo);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: relative;
   padding: var(--e4) 0;
 }
 
-/* lineas de escaneo, puramente decorativas */
+/* trama de fondo muy tenue, da textura sin llamar la atencion */
 #game::after {
   content: '';
   position: absolute;
@@ -116,9 +125,9 @@ button {
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.03) 2px,
-    rgba(0, 0, 0, 0.03) 4px
+    transparent 3px,
+    rgba(0, 0, 0, 0.035) 3px,
+    rgba(0, 0, 0, 0.035) 4px
   );
   pointer-events: none;
   z-index: 1;
@@ -130,24 +139,51 @@ button {
 .start-screen {
   position: absolute;
   inset: 0;
-  background: rgba(10, 12, 17, 0.98);
-  backdrop-filter: blur(6px);
+  background: rgba(11, 13, 18, 0.97);
+  backdrop-filter: blur(10px);
   z-index: 50;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--e5);
-  padding: var(--e4);
+  gap: var(--e6);
+  padding: var(--e5) var(--e4);
+}
+
+/* marca del juego, sobre el titulo */
+.start-marca {
+  font-size: 11px;
+  font-weight: 700;
+  font-stretch: 78%;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--sello);
+  display: flex;
+  align-items: center;
+  gap: var(--e3);
+}
+
+/* filetes a los costados de la marca */
+.start-marca::before,
+.start-marca::after {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
 }
 
 .start-title {
-  color: var(--texto-fuerte);
-  font-family: var(--serif);
-  font-size: clamp(30px, 8vw, 42px);
-  font-style: italic;
+  font-size: clamp(30px, 8.5vw, 44px);
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--papel-100);
   text-align: center;
   text-wrap: balance;
+  margin-top: calc(-1 * var(--e4));
 }
 
 .clases-container {
@@ -155,51 +191,69 @@ button {
   flex-direction: column;
   gap: var(--e3);
   width: 100%;
-  max-width: 460px;
-  max-height: 60vh;
+  max-width: 430px;
+  max-height: 58vh;
   overflow-y: auto;
   padding-right: var(--e2);
   scrollbar-width: thin;
-  scrollbar-color: var(--borde) transparent;
+  scrollbar-color: var(--tinta-600) transparent;
 }
 
 .clases-container::-webkit-scrollbar { width: 4px; }
 .clases-container::-webkit-scrollbar-track { background: transparent; }
-.clases-container::-webkit-scrollbar-thumb { background: var(--borde); border-radius: 4px; }
+.clases-container::-webkit-scrollbar-thumb { background: var(--tinta-600); border-radius: 4px; }
 
 .btn-clase {
-  background: var(--superficie);
-  border: 1px solid var(--borde);
+  position: relative;
+  background: var(--tinta-800);
+  border: 1px solid var(--tinta-600);
   border-radius: var(--radio-chico);
   padding: var(--e4) var(--e5);
   cursor: pointer;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: var(--e2);
+  gap: var(--e1);
+  overflow: hidden;
   transition: background var(--transicion), border-color var(--transicion), transform var(--transicion);
+}
+
+/* filete de acento que aparece al enfocar la opcion */
+.btn-clase::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--sello);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--transicion);
 }
 
 .btn-clase:hover,
 .btn-clase:focus-visible {
-  background: #1a1d28;
-  border-color: var(--borde-activo);
-  transform: translateY(-2px);
+  background: var(--tinta-700);
+  border-color: var(--tinta-500);
+  transform: translateX(3px);
 }
 
-.btn-clase:active { transform: translateY(0); }
+.btn-clase:hover::before,
+.btn-clase:focus-visible::before { transform: scaleY(1); }
 
-/* nombre de la clase, generado desde el cliente */
+.btn-clase:active { transform: translateX(0); }
+
 .clase-nombre {
-  font-size: clamp(18px, 5vw, 21px);
+  font-size: 17px;
   font-weight: 700;
-  color: var(--texto-fuerte);
-  letter-spacing: 0.02em;
+  font-stretch: 105%;
+  letter-spacing: 0.01em;
+  color: var(--papel-100);
 }
 
 .clase-desc {
-  font-size: 14px;
-  color: var(--texto-suave);
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--papel-500);
   line-height: 1.5;
 }
 
@@ -210,11 +264,11 @@ button {
   position: relative;
   z-index: 3;
   width: var(--ancho-juego);
-  background: var(--superficie);
-  border: 1px solid var(--borde);
+  background: var(--tinta-800);
+  border: 1px solid var(--tinta-600);
   border-bottom: none;
   border-radius: var(--radio) var(--radio) 0 0;
-  padding: var(--e4) var(--e5) var(--e3);
+  padding: var(--e5) var(--e5) var(--e4);
   display: flex;
   flex-direction: column;
   gap: var(--e2);
@@ -223,89 +277,101 @@ button {
 .stat-row {
   display: flex;
   align-items: center;
-  gap: var(--e2);
+  gap: var(--e3);
 }
 
 .stat-icon {
-  font-size: 18px;
-  width: 24px;
+  font-size: 15px;
+  width: 20px;
   text-align: center;
   flex-shrink: 0;
+  opacity: 0.85;
 }
 
 .stat-name {
-  font-size: 12px;
-  letter-spacing: 0.12em;
+  font-size: 10.5px;
+  font-weight: 600;
+  font-stretch: 76%;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  width: 84px;
+  width: 76px;
   flex-shrink: 0;
+  color: var(--papel-500);
 }
 
 .stat-bar-bg {
   flex: 1;
-  height: 5px;
-  border-radius: 3px;
+  height: 6px;
+  border-radius: 999px;
   overflow: hidden;
   min-width: 0;
 }
 
 .stat-bar-fill {
   height: 100%;
-  border-radius: 3px;
-  transition: width 0.6s cubic-bezier(.4, 0, .2, 1);
+  border-radius: 999px;
+  transition: width 0.65s cubic-bezier(.4, 0, .2, 1);
 }
 
 .stat-val {
   font-size: 12px;
-  width: 40px;
+  font-weight: 600;
+  font-stretch: 88%;
+  width: 38px;
   text-align: right;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
-  /* la cifra de dinero no debe partirse entre el simbolo y el monto */
   white-space: nowrap;
 }
 
 /* color por atributo */
-.s-salud .stat-name, .s-salud .stat-val { color: var(--salud); }
+.s-salud .stat-val { color: var(--salud); }
 .s-salud .stat-bar-bg { background: var(--salud-fondo); }
 .s-salud .stat-bar-fill { background: var(--salud); }
 
-.s-intelecto .stat-name, .s-intelecto .stat-val { color: var(--intelecto); }
+.s-intelecto .stat-val { color: var(--intelecto); }
 .s-intelecto .stat-bar-bg { background: var(--intelecto-fondo); }
 .s-intelecto .stat-bar-fill { background: var(--intelecto); }
 
-.s-laboral .stat-name, .s-laboral .stat-val { color: var(--laboral); }
+.s-laboral .stat-val { color: var(--laboral); }
 .s-laboral .stat-bar-bg { background: var(--laboral-fondo); }
 .s-laboral .stat-bar-fill { background: var(--laboral); }
 
-.s-social .stat-name, .s-social .stat-val { color: var(--social); }
+.s-social .stat-val { color: var(--social); }
 .s-social .stat-bar-bg { background: var(--social-fondo); }
 .s-social .stat-bar-fill { background: var(--social); }
 
-/* el dinero no tiene techo, se muestra como cifra y no como barra */
-.s-dinero { margin-top: var(--e1); }
-.s-dinero .stat-name { color: var(--dinero); }
+/* el dinero no tiene techo: se muestra como cifra, separado por un filete */
+.s-dinero {
+  margin-top: var(--e2);
+  padding-top: var(--e3);
+  border-top: 1px solid var(--tinta-600);
+}
+
 .s-dinero .stat-bar-bg { display: none; }
+
 .s-dinero .stat-val {
   color: var(--dinero);
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
+  font-stretch: 92%;
+  letter-spacing: -0.01em;
   width: auto;
   flex: 1;
   text-align: right;
 }
 
-/* indicador de variacion: ocupa un lugar fijo para no desbordar en movil */
+/* indicador de variacion, en un lugar reservado dentro de la fila */
 .delta-badge {
   width: var(--ancho-delta);
   flex-shrink: 0;
   text-align: right;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  font-stretch: 84%;
   font-variant-numeric: tabular-nums;
   opacity: 0;
-  transform: translateX(-6px);
+  transform: translateX(-8px);
   transition: opacity 0.3s, transform 0.3s;
   pointer-events: none;
   white-space: nowrap;
@@ -317,32 +383,30 @@ button {
 }
 
 .delta-badge.up { color: var(--dinero); }
-.delta-badge.down { color: var(--alerta); }
+.delta-badge.down { color: var(--salud); }
 
-#d-dinero { font-size: 12px; }
+#d-dinero { font-size: 11.5px; }
 
-/* pulso al modificarse una barra */
 @keyframes bar-pulse {
   0%   { opacity: 1; }
-  35%  { opacity: 0.3; }
+  35%  { opacity: 0.35; }
   100% { opacity: 1; }
 }
 
 .bar-changing .stat-bar-fill { animation: bar-pulse 0.55s ease; }
 
-/* parpadeo del atributo que termino la partida */
 @keyframes blink-bar {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.2; }
 }
 
-.bar-critical .stat-bar-fill { animation: blink-bar 1s ease-in-out infinite; }
+.bar-critical .stat-bar-fill,
 .bar-critical .stat-name,
 .bar-critical .stat-val { animation: blink-bar 1s ease-in-out infinite; }
 
 .hud-sep {
   height: 1px;
-  background: var(--borde);
+  background: var(--tinta-600);
 }
 
 /* --------------------------------------------------------------------------
@@ -360,64 +424,74 @@ button {
   cursor: grab;
   transform-origin: bottom center;
   transition: transform 0.38s cubic-bezier(.4, 0, .2, 1), opacity 0.35s;
-  /* el arrastre no debe seleccionar texto ni disparar el scroll horizontal */
   user-select: none;
   -webkit-user-select: none;
   touch-action: pan-y;
+  filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.55));
 }
 
 #card-inner:active { cursor: grabbing; }
 
-/* inclinacion mientras se arrastra */
-#card-inner.tilt-l { transform: rotate(-4deg) translateX(-14px); }
-#card-inner.tilt-r { transform: rotate(4deg) translateX(14px); }
+#card-inner.tilt-l { transform: rotate(-3.5deg) translateX(-16px); }
+#card-inner.tilt-r { transform: rotate(3.5deg) translateX(16px); }
 
-/* salida lateral al decidir */
-#card-inner.fly-l { transform: rotate(-26deg) translateX(-600px); opacity: 0; }
-#card-inner.fly-r { transform: rotate(26deg) translateX(600px); opacity: 0; }
+#card-inner.fly-l { transform: rotate(-24deg) translateX(-620px); opacity: 0; }
+#card-inner.fly-r { transform: rotate(24deg) translateX(620px); opacity: 0; }
 
-#card-inner.entering { animation: slideUp 0.32s cubic-bezier(.4, 0, .2, 1) forwards; }
+#card-inner.entering { animation: slideUp 0.34s cubic-bezier(.4, 0, .2, 1) forwards; }
 
 @keyframes slideUp {
-  from { transform: translateY(16px); opacity: 0; }
+  from { transform: translateY(18px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
 }
 
+/* encabezado de la carta */
 #name-block {
-  background: var(--superficie);
-  border-left: 1px solid var(--borde);
-  border-right: 1px solid var(--borde);
-  padding: var(--e3) var(--e5);
+  background: var(--tinta-800);
+  border-left: 1px solid var(--tinta-600);
+  border-right: 1px solid var(--tinta-600);
+  padding: var(--e3) var(--e5) var(--e4);
   display: flex;
   flex-direction: column;
   gap: var(--e1);
 }
 
+/* linea de contexto, con filete de acento a la izquierda */
 #npc-tag {
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: var(--texto-tenue);
+  position: relative;
+  padding-left: var(--e3);
+  font-size: 10px;
+  font-weight: 600;
+  font-stretch: 78%;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  line-height: 1.4;
+  color: var(--papel-700);
+  line-height: 1.5;
+}
+
+#npc-tag::before {
+  content: '';
+  position: absolute;
+  inset: 2px auto 2px 0;
+  width: 2px;
+  background: var(--sello);
+  opacity: 0.65;
 }
 
 #npc-name {
-  font-family: var(--serif);
-  font-size: 18px;
-  font-style: italic;
-  color: var(--texto-suave);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--papel-300);
 }
 
-/* se oculta cuando el cliente no le pone contenido */
 #npc-name:empty { display: none; }
 
 #card-image {
   width: 100%;
-  /* proporcion fija: evita el salto de layout mientras carga la ilustracion */
   aspect-ratio: 25 / 13;
-  background: var(--hueco-imagen);
-  border-left: 1px solid var(--borde);
-  border-right: 1px solid var(--borde);
+  background: var(--tinta-900);
+  border-left: 1px solid var(--tinta-600);
+  border-right: 1px solid var(--tinta-600);
   overflow: hidden;
   position: relative;
 }
@@ -430,58 +504,55 @@ button {
   display: block;
 }
 
-/* velo inferior para que el texto de abajo no compita con la ilustracion */
+/* velo inferior, para que la ilustracion entregue el foco al texto */
 #card-image::after {
   content: '';
   position: absolute;
   inset: auto 0 0 0;
-  height: 45%;
-  background: linear-gradient(to bottom, transparent, rgba(10, 12, 17, 0.55));
+  height: 52%;
+  background: linear-gradient(to bottom, transparent, rgba(11, 13, 18, 0.72));
   pointer-events: none;
 }
 
 #interactive-block {
-  background: var(--superficie);
-  border: 1px solid var(--borde);
+  background: var(--tinta-800);
+  border: 1px solid var(--tinta-600);
   border-top: none;
   border-radius: 0 0 var(--radio) var(--radio);
   display: flex;
   align-items: stretch;
-  min-height: 132px;
+  min-height: 140px;
 }
 
 .nav-btn {
-  width: 48px;
-  background: var(--superficie-hundida);
-  border: none;
-  /* el tenue no llega al contraste minimo sobre la superficie hundida */
-  color: var(--texto-suave);
-  font-size: 18px;
+  width: 52px;
+  background: var(--tinta-700);
+  color: var(--papel-500);
+  font-size: 15px;
   cursor: pointer;
   flex-shrink: 0;
   transition: background var(--transicion), color var(--transicion);
 }
 
-#btn-izq { border-right: 1px solid var(--borde); border-radius: 0 0 0 var(--radio); }
-#btn-der { border-left: 1px solid var(--borde); border-radius: 0 0 var(--radio) 0; }
+#btn-izq { border-right: 1px solid var(--tinta-600); border-radius: 0 0 0 var(--radio); }
+#btn-der { border-left: 1px solid var(--tinta-600); border-radius: 0 0 var(--radio) 0; }
 
 .nav-btn:hover,
 .nav-btn:focus-visible {
-  background: #161924;
-  color: var(--texto-fuerte);
+  background: var(--tinta-600);
+  color: var(--papel-100);
 }
 
-.nav-btn:active { background: #1d2130; }
+.nav-btn:active { background: var(--tinta-500); }
 
 #situation-text {
   flex: 1;
   min-width: 0;
   padding: var(--e5) var(--e5);
-  font-family: var(--serif);
-  font-size: clamp(16px, 4.2vw, 18px);
-  font-style: italic;
-  color: var(--texto);
-  line-height: 1.55;
+  font-size: clamp(15px, 3.9vw, 16.5px);
+  font-weight: 400;
+  color: var(--papel-300);
+  line-height: 1.6;
   text-align: center;
   text-wrap: pretty;
   display: flex;
@@ -490,14 +561,23 @@ button {
   transition: color var(--transicion);
 }
 
+/* al asomar una opcion, el texto se distingue del enunciado de la carta */
+#situation-text.previsualizando {
+  color: var(--papel-100);
+  font-weight: 500;
+}
+
 #log {
   width: var(--ancho-juego);
   margin-top: var(--e4);
-  font-size: 13px;
-  color: var(--texto-tenue);
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  font-weight: 500;
+  font-stretch: 84%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--papel-700);
   line-height: 1.6;
-  min-height: 22px;
+  min-height: 20px;
   text-align: center;
   position: relative;
   z-index: 2;
@@ -505,7 +585,7 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   superposiciones: fin de partida y alerta de estres
+   superpuestos: fin de partida y alerta de estres
    -------------------------------------------------------------------------- */
 #gameover-overlay,
 #panic-overlay {
@@ -522,34 +602,35 @@ button {
 }
 
 #gameover-overlay.active {
-  background: rgba(0, 0, 0, 0.88);
+  background: rgba(6, 7, 10, 0.9);
   pointer-events: all;
 }
 
 #panic-overlay.active {
-  background: rgba(20, 5, 5, 0.88);
+  background: rgba(26, 6, 4, 0.9);
   pointer-events: all;
 }
 
 #gameover-box,
 #panic-box {
   width: 100%;
-  max-width: 420px;
-  background: var(--superficie-elevada);
-  border: 1px solid var(--borde);
+  max-width: 400px;
+  background: var(--tinta-800);
+  border: 1px solid var(--tinta-600);
   border-radius: var(--radio);
-  padding: var(--e6) var(--e5);
+  box-shadow: var(--sombra-carta);
+  padding: var(--e7) var(--e5) var(--e5);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--e4);
+  gap: var(--e3);
   opacity: 0;
-  transform: translateY(20px) scale(0.96);
+  transform: translateY(18px) scale(0.97);
   transition: opacity 0.4s 0.3s, transform 0.4s 0.3s;
 }
 
 #panic-box {
-  border-color: var(--alerta);
+  border-color: var(--sello);
   transition: opacity 0.4s, transform 0.4s;
 }
 
@@ -561,76 +642,84 @@ button {
 
 #go-icon,
 #panic-icon {
-  font-size: clamp(44px, 12vw, 56px);
+  font-size: clamp(38px, 11vw, 46px);
   line-height: 1;
+  margin-bottom: var(--e1);
 }
 
 #go-title,
 #panic-title {
-  font-family: var(--serif);
-  font-size: clamp(24px, 7vw, 32px);
-  font-style: italic;
-  color: var(--texto-fuerte);
+  font-size: clamp(23px, 6.5vw, 28px);
+  font-weight: 800;
+  font-stretch: 108%;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+  text-transform: uppercase;
+  color: var(--papel-100);
   text-align: center;
   text-wrap: balance;
 }
 
-#panic-title { color: var(--alerta); }
+#panic-title { color: var(--sello); }
 
 #go-rule,
 #panic-rule {
-  width: 80%;
-  height: 1px;
-  background: var(--borde);
+  width: 48px;
+  height: 2px;
+  background: var(--sello);
+  border-radius: 2px;
+  margin: var(--e1) 0;
 }
-
-#panic-rule { background: var(--alerta); opacity: 0.3; }
 
 #go-msg,
 #panic-msg {
-  font-family: var(--serif);
-  font-size: 16px;
-  font-style: italic;
-  color: var(--texto-suave);
-  line-height: 1.7;
+  font-size: 14.5px;
+  font-weight: 400;
+  color: var(--papel-500);
+  line-height: 1.65;
   text-align: center;
   text-wrap: pretty;
 }
 
-#panic-msg { color: var(--texto); }
+#panic-msg { color: var(--papel-300); }
 
-/* etiqueta del atributo que causo la derrota */
+/* etiqueta del atributo que cerro la partida */
 #go-stat-label {
-  font-size: 10px;
+  margin-top: var(--e1);
+  font-size: 9.5px;
+  font-weight: 600;
+  font-stretch: 78%;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   padding: var(--e1) var(--e3);
-  border-radius: 20px;
-  border: 1px solid var(--borde);
-  color: var(--texto-tenue);
+  border-radius: 999px;
+  border: 1px solid var(--tinta-500);
+  background: var(--sello-tenue);
+  color: var(--papel-500);
 }
 
 #go-restart {
-  margin-top: var(--e1);
+  margin-top: var(--e4);
   width: 100%;
   min-height: 50px;
   background: transparent;
-  border: 1px solid var(--borde);
+  border: 1px solid var(--tinta-500);
   border-radius: var(--radio-chico);
-  font-family: var(--mono);
-  font-size: 13px;
-  letter-spacing: 0.15em;
+  font-size: 12px;
+  font-weight: 700;
+  font-stretch: 84%;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--texto-suave);
+  color: var(--papel-300);
   cursor: pointer;
   transition: border-color var(--transicion), color var(--transicion), background var(--transicion);
 }
 
 #go-restart:hover,
 #go-restart:focus-visible {
-  border-color: var(--borde-activo);
-  color: var(--texto-fuerte);
-  background: #161924;
+  border-color: var(--sello);
+  background: var(--sello-tenue);
+  color: var(--papel-100);
 }
 
 /* --------------------------------------------------------------------------
@@ -652,40 +741,37 @@ button {
   inset: 0;
   pointer-events: none;
   z-index: 15;
-  box-shadow: inset 0 0 120px 40px rgba(120, 10, 10, 0.55);
+  box-shadow: inset 0 0 120px 40px rgba(140, 20, 10, 0.5);
 }
 
 /* --------------------------------------------------------------------------
    adaptaciones
    -------------------------------------------------------------------------- */
-
-/* en pantallas angostas el indicador de variacion se achica */
-@media (max-width: 420px) {
+@media (max-width: 430px) {
   :root {
     --ancho-delta: 48px;
-    --e5: 18px;
+    --e5: 17px;
+    --e7: 34px;
   }
 
-  .stat-name { width: 68px; font-size: 11px; }
+  .stat-name { width: 64px; letter-spacing: 0.12em; }
   .stat-val { width: 34px; }
-  .nav-btn { width: 42px; }
-  #interactive-block { min-height: 116px; }
+  .nav-btn { width: 44px; }
+  #interactive-block { min-height: 124px; }
+  .s-dinero .stat-val { font-size: 15px; }
 }
 
-/* en los telefonos mas angostos se comprime, pero el indicador de variacion
-   se conserva: es la unica devolucion inmediata que recibe el jugador */
 @media (max-width: 360px) {
   :root {
     --ancho-delta: 40px;
     --e5: 14px;
   }
 
-  .stat-name { width: 52px; letter-spacing: 0.06em; }
+  .stat-name { width: 52px; letter-spacing: 0.08em; }
+  .stat-icon { display: none; }
   .delta-badge { font-size: 11px; }
-  .s-dinero .stat-val { font-size: 14px; }
 }
 
-/* respetar la preferencia de movimiento reducido del sistema */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -695,7 +781,7 @@ button {
     transition-duration: 0.01ms !important;
   }
 
-  #card-inner.fly-l { transform: none; opacity: 0; }
+  #card-inner.fly-l,
   #card-inner.fly-r { transform: none; opacity: 0; }
   .stress-tremble { animation: none; }
 }

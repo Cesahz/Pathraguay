@@ -55,14 +55,13 @@ const ControladorVisual = {
         const st = document.getElementById('situation-text');
         if (modo === 'izq') {
             st.textContent = '« ' + this.cartaActual.opcion_izq.texto;
-            st.style.color = '#8a8fa8';
         } else if (modo === 'der') {
             st.textContent = this.cartaActual.opcion_der.texto + ' »';
-            st.style.color = '#8a8fa8';
         } else {
             st.textContent = this.cartaActual.texto;
-            st.style.color = '#d0d2dc';
         }
+        // el color lo decide la hoja de estilos, aca solo se marca el modo
+        st.classList.toggle('previsualizando', modo !== 'base');
     },
 
     // actualiza las barras de vida, estudio, trabajo, etc.
