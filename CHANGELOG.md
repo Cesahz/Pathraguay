@@ -31,7 +31,7 @@ narrativo no cambian respecto de `0.1.0`.
 
 ### Agregado
 
-- Suite de 92 pruebas sobre pytest, que cubre las reglas del motor, el
+- Suite de 100 pruebas sobre pytest, que cubre las reglas del motor, el
   catalogo de clases, el contrato http, la integridad del grafo publicado y
   el mapeo de imagenes. Validada contra diez mutaciones deliberadas del
   codigo y de los datos, todas detectadas.
@@ -39,7 +39,7 @@ narrativo no cambian respecto de `0.1.0`.
   imagenes de `cartas.json` y del front y falla si alguna no resuelve a un
   archivo existente. Compara contra el listado del directorio para detectar
   desfasajes de mayusculas, invisibles en Windows y fatales en Linux.
-- `static/img/predeterminado.png`, respaldo real para la ruta a la que ya
+- `static/img/predeterminado.webp`, respaldo real para la ruta a la que ya
   apuntaba el cliente.
 - `pytest.ini` y `requirements-dev.txt`.
 - Navegacion con las flechas del teclado, foco visible en todos los
@@ -47,6 +47,7 @@ narrativo no cambian respecto de `0.1.0`.
 - Marcado semantico, roles y etiquetas accesibles en los superpuestos, y
   regiones live para que los cambios de situacion y de atributos se anuncien.
 - Respeto por la preferencia de movimiento reducido del sistema.
+- La marca del juego sobre el titulo de la pantalla de inicio.
 
 ### Cambiado
 
@@ -61,9 +62,8 @@ narrativo no cambian respecto de `0.1.0`.
   en la capa web.
 - `generador_cartas.py` se movio a `herramientas/`, por ser una utilidad de
   autoria de contenido y no parte del servidor.
-- Assets renombrados a nombres descriptivos: `oficina.png` a
-  `oficina_dia.png`, `oficinahe.png` a `oficina_noche.png` y `home.png` a
-  `dormitorio.png`.
+- Assets renombrados a nombres descriptivos: `oficina` a `oficina_dia`,
+  `oficinahe` a `oficina_noche` y `home` a `dormitorio`.
 - El `.gitignore` pasa de ocho reglas a una version completa por secciones,
   que cubre entornos virtuales, secretos, bases de datos, migraciones, tests,
   frontend, logs, editores y sistemas operativos.
@@ -72,6 +72,14 @@ narrativo no cambian respecto de `0.1.0`.
 - Se eliminaron trece reglas de estilo que ningun archivo aplicaba y se
   agregaron las dos animaciones de estres que el cliente aplicaba sin que
   existieran.
+- La interfaz se rediseño sobre un sistema tipografico unico. Se reemplazo la
+  mezcla de IM Fell English con Share Tech Mono por la familia Archivo, que
+  cubre los cuatro roles variando peso y ancho de una sola fuente variable.
+- Paleta nueva sobre dos ejes, tinta y papel, con los cinco atributos
+  llevados a una luminosidad comun y un acento unico usado con moderacion.
+- Las once ilustraciones pasaron de PNG a WebP con tope de 1200 pixeles de
+  ancho: de 9.25 MB a 873 KB, un decimo del peso original. Los originales
+  quedan fuera del repositorio, en `assets_fuente/`.
 
 ### Corregido
 
@@ -79,8 +87,8 @@ narrativo no cambian respecto de `0.1.0`.
   tenian el campo `img` vacio y caian a `/static/img/predeterminado.png`, que
   no existia en el repositorio. Se asigno su ilustracion a cada nodo y se
   sumaron los cinco assets que faltaban.
-- `trabajosoñado.png` se renombro a `trabajo_sonado.png`: la eñe en el nombre
-  del archivo rompe al servir la ruta segun el entorno.
+- `trabajosoñado` se renombro a `trabajo_sonado`: la eñe en el nombre del
+  archivo rompe al servir la ruta segun el entorno.
 - Los cinco assets que ya estaban en el repositorio no los referenciaba
   ningun archivo.
 - El unico punto de corte del diseño estaba en 360px, de modo que entre
