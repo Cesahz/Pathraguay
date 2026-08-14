@@ -40,7 +40,7 @@ const ControladorVisual = {
             imgElement.src = carta.img; // carga la imagen de la base de datos
         } else {
             // imagen por defecto por seguridad si no hay ruta definida
-            imgElement.src = "/static/img/predeterminado.png";
+            imgElement.src = "/static/img/predeterminado.webp";
         }
         // la ilustracion acompaña al texto, no aporta informacion propia
         imgElement.alt = '';

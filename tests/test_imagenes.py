@@ -22,6 +22,18 @@ def _archivos_en_disco():
     return {ruta.name for ruta in CARPETA_IMAGENES.iterdir() if ruta.is_file()}
 
 
+def _respaldo_del_cliente():
+    """extraer del cliente la ruta a la que cae una carta sin imagen.
+
+    se lee de app.js en lugar de fijarla aca para que renombrar el respaldo no
+    deje la prueba pasando en falso.
+    """
+    contenido = (RAIZ / "static" / "app.js").read_text(encoding="utf-8")
+    coincidencias = re.findall(r'imgElement\.src\s*=\s*"(/static/img/[^"]+)"', contenido)
+    assert len(coincidencias) == 1, "se esperaba un unico respaldo en app.js: %r" % coincidencias
+    return coincidencias[0]
+
+
 class TestReferenciasDelGrafo:
     def test_ningun_nodo_queda_sin_imagen(self, cartas_reales):
         """un campo vacio manda la carta al respaldo y se ve como un error."""
@@ -57,9 +69,16 @@ class TestReferenciasDelGrafo:
             assert re.fullmatch(r"[a-z0-9_.-]+", nombre), "nombre problematico: %r" % nombre
 
     def test_ningun_nodo_usa_el_respaldo(self, cartas_reales):
+        respaldo = _respaldo_del_cliente()
+
         for identificador, carta in cartas_reales.items():
-            assert not carta["img"].endswith("predeterminado.png"), \
+            assert carta["img"] != respaldo, \
                 "%s quedo apuntando al respaldo" % identificador
+
+    def test_el_respaldo_existe_en_disco(self):
+        respaldo = _respaldo_del_cliente()
+
+        assert respaldo[len(PREFIJO):] in _archivos_en_disco()
 
 
 class TestReferenciasDelFront:

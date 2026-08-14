@@ -173,4 +173,4 @@ class TestImagenesServidas:
 
     def test_el_respaldo_del_cliente_existe(self, cliente):
         """app.js cae a esta ruta cuando una carta no declara imagen."""
-        assert cliente.get("/static/img/predeterminado.png").status_code == 200
+        assert cliente.get("/static/img/predeterminado.webp").status_code == 200
