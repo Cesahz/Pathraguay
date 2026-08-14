@@ -10,14 +10,53 @@ el versionado sigue [SemVer](https://semver.org/lang/es/).
 El proyecto esta en la serie `0.x`. La version que gano la hackathon CodePRO
 5.1 es un MVP funcional, no un producto terminado, y se registra como `0.1.0`.
 
-Lo que falta para llegar a `1.0.0`:
+`1.0.0` significa un juego terminado: jugable de principio a fin, balanceado,
+probado con jugadores reales y con identidad propia. Falta lo siguiente.
 
-- la narrativa termina en un nodo inexistente que cierra la demo: el grafo
-  publicado son doce nodos de un recorrido mucho mas largo
+**Contenido y narrativa**
+
+- el grafo publicado son doce nodos, de un recorrido pensado mucho mas largo
+- no hay finales escritos: el ultimo nodo apunta a un destino inexistente y la
+  partida corta sin resolucion narrativa
+- las tres clases jugables solo alteran las estadisticas iniciales. el
+  recorrido no reacciona a la clase elegida, de modo que se juegan igual
+- no hay variacion ni azar entre partidas, con lo cual la rejugabilidad es
+  practicamente nula
+
+**Balance**
+
+- los efectos de cada opcion son valores sueltos, elegidos a mano y nunca
+  ajustados. no existe una curva de dificultad
+- las clases no estan equilibradas entre si. con Heredero, que arranca con
+  cinco millones, la bancarrota es inalcanzable y el dinero deja de ser una
+  amenaza durante toda la partida
+- solo dos de las cinco estadisticas pueden terminar la partida. intelecto,
+  laboral y social pueden llegar a cero sin consecuencia alguna
+- ninguna decision se siente costosa porque los margenes iniciales son
+  amplios frente a la magnitud de los efectos
+
+**Testeo con jugadores**
+
+- nadie jugo el recorrido de forma sistematica. no hay registro de partidas
+  ni de donde se abandona
+- no hay telemetria de que ramas se eligen, con lo cual no se sabe si alguna
+  quedo muerta en la practica
+- la dificultad percibida nunca se contrasto contra la intencion del diseño
+
+**Identidad**
+
+- las ilustraciones se generaron con IA y no comparten estilo, paleta ni
+  autoria. el juego todavia no tiene una imagen propia
+- no hay sonido ni musica
+
+**Arquitectura y operacion**
+
 - el servidor sostiene una sola partida en memoria, sin sesiones: dos
   jugadores simultaneos comparten el mismo estado
 - no hay persistencia, de modo que reiniciar el proceso borra la partida
-- solo dos de las cinco stats terminan la partida
+- no hay despliegue. el juego corre unicamente en local, sobre el servidor
+  de desarrollo de Flask, que no es apto para produccion
+- las pruebas no corren de forma automatica: no hay integracion continua
 
 Hasta que esos puntos se resuelvan, la version menor sube con cada
 incorporacion y la de parche con las correcciones.
