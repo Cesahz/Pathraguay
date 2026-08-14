@@ -42,6 +42,11 @@ narrativo no cambian respecto de `0.1.0`.
 - `static/img/predeterminado.png`, respaldo real para la ruta a la que ya
   apuntaba el cliente.
 - `pytest.ini` y `requirements-dev.txt`.
+- Navegacion con las flechas del teclado, foco visible en todos los
+  controles y traslado del foco al boton de reinicio al cerrar la partida.
+- Marcado semantico, roles y etiquetas accesibles en los superpuestos, y
+  regiones live para que los cambios de situacion y de atributos se anuncien.
+- Respeto por la preferencia de movimiento reducido del sistema.
 
 ### Cambiado
 
@@ -62,6 +67,11 @@ narrativo no cambian respecto de `0.1.0`.
 - El `.gitignore` pasa de ocho reglas a una version completa por secciones,
   que cubre entornos virtuales, secretos, bases de datos, migraciones, tests,
   frontend, logs, editores y sistemas operativos.
+- La hoja de estilos se reescribio con los colores, tipografias y espaciados
+  extraidos a variables css, y el ancho del tablero pasa de fijo a fluido.
+- Se eliminaron trece reglas de estilo que ningun archivo aplicaba y se
+  agregaron las dos animaciones de estres que el cliente aplicaba sin que
+  existieran.
 
 ### Corregido
 
@@ -73,6 +83,14 @@ narrativo no cambian respecto de `0.1.0`.
   del archivo rompe al servir la ruta segun el entorno.
 - Los cinco assets que ya estaban en el repositorio no los referenciaba
   ningun archivo.
+- El unico punto de corte del diseño estaba en 360px, de modo que entre
+  361px y 500px la pagina se desbordaba horizontalmente.
+- Las flechas de decision no alcanzaban el contraste minimo sobre su fondo.
+- El catalogo de clases se insertaba con `innerHTML` interpolando texto
+  devuelto por el servidor, que quedaba interpretado como marcado.
+- La pantalla de cierre rompia si el servidor informaba un atributo que el
+  cliente no tenia registrado, en lugar de usar el texto generico.
+- Se quito una traza de depuracion que se emitia en cada decision.
 
 ---
 
