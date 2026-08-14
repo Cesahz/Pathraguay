@@ -39,8 +39,8 @@ No hay respuesta correcta. Hay costos.
 ## Como correrlo
 
 ```bash
-git clone https://github.com/Cesahz/hackathon-6.0.git
-cd hackathon-6.0
+git clone https://github.com/Cesahz/Pathraguay.git
+cd Pathraguay
 
 python -m venv .venv
 source .venv/bin/activate      # en Windows: .venv\Scripts\activate
