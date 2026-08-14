@@ -112,15 +112,17 @@ const ControladorVisual = {
     ejecutarGameOver: function(statFatal, mensajeServidor) {
         this.ocultarDeltas();
         
-        const title = statFatal ? this.mensajesDerrota[statFatal].title : 'fin del trayecto';
-        const msg = statFatal ? this.mensajesDerrota[statFatal].msg : mensajeServidor;
-        const icon = statFatal ? this.mensajesDerrota[statFatal].icon : '⏳';
+        // si el servidor informa una stat que el cliente no conoce, se usa el cierre generico
+        const derrota = statFatal ? this.mensajesDerrota[statFatal] : null;
+        const title = derrota ? derrota.title : 'fin del trayecto';
+        const msg = derrota ? derrota.msg : mensajeServidor;
+        const icon = derrota ? derrota.icon : '⏳';
 
         document.getElementById('go-icon').textContent = icon;
         document.getElementById('go-title').textContent = title;
         document.getElementById('go-msg').textContent = msg;
         
-        if (statFatal) {
+        if (derrota) {
             const labels = { salud: 'salud · 0%', intelecto: 'intelecto · 0%', laboral: 'laboral · 0%', social: 'social · 0%', dinero: 'dinero · ₲ 0' };
             document.getElementById('go-stat-label').textContent = labels[statFatal];
             document.getElementById('row-' + statFatal).classList.add('bar-critical');
@@ -150,7 +152,6 @@ const ControladorVisual = {
         })
         .then(res => res.json())
         .then(resultadoBackend => {
-            console.log("paquete del servidor:", resultadoBackend);
             setTimeout(() => {
                 this.renderizarStats(resultadoBackend.stats);
                 this.mostrarDeltas(resultadoBackend.efectos); 
@@ -289,10 +290,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-clase';
                 btn.onclick = () => elegirClase(nombre);
-                btn.innerHTML = `
-                    <span style="font-weight: bold; font-size: 22px; color: #c8cad4;">${nombre}</span>
-                    <span class="clase-desc">${datos.descripcion}</span>
-                `;
+
+                // se arma con nodos de texto para no interpretar el contenido como html
+                const titulo = document.createElement('span');
+                titulo.className = 'clase-nombre';
+                titulo.textContent = nombre;
+
+                const descripcion = document.createElement('span');
+                descripcion.className = 'clase-desc';
+                descripcion.textContent = datos.descripcion;
+
+                btn.append(titulo, descripcion);
                 container.appendChild(btn);
             }
         });
