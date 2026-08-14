@@ -202,6 +202,14 @@ $RECYCLE.BIN/
 *.lnk
 
 #===========================================================================
+# espacio de trabajo del equipo
+#===========================================================================
+#notas internas, ideas y borradores para etapas futuras. no se versiona:
+#es un espacio para pensar en voz alta, no documentacion del proyecto.
+#la documentacion que si viaja vive en docs/ y en el README.
+notas/
+
+#===========================================================================
 # assets pesados y material de trabajo
 #===========================================================================
 #originales sin optimizar de las ilustraciones, no van al repositorio
