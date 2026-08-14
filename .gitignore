@@ -1,10 +1,216 @@
-
-#cache y archivos compilados de python
+#===========================================================================
+# python
+#===========================================================================
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 
-#posibles archivos inutiles del SO
+#distribucion y empaquetado
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+#instaladores de pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+#===========================================================================
+# entornos virtuales
+#===========================================================================
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+.pdm.toml
+__pypackages__/
+
+#===========================================================================
+# variables de entorno y secretos
+#===========================================================================
+#nunca versionar credenciales de base de datos ni claves de servicios
+.env
+.env.*
+!.env.example
+!.env.template
+*.pem
+*.key
+*.crt
+*.p12
+secrets.json
+credentials.json
+service-account*.json
+
+#===========================================================================
+# bases de datos
+#===========================================================================
+#sqlite y sus archivos auxiliares de journal, write ahead log y shared memory
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+db.sqlite3
+db.sqlite3-journal
+
+#volcados, respaldos y semillas generadas
+*.sql
+*.sql.gz
+*.dump
+*.bak
+*.rdb
+dumps/
+backups/
+!schema.sql
+!seeds/*.sql
+
+#datos de motores levantados en local
+pgdata/
+mysql-data/
+mongo-data/
+redis-data/
+data/postgres/
+data/mysql/
+
+#===========================================================================
+# migraciones y orm
+#===========================================================================
+#las versiones de alembic si se versionan, los artefactos locales no
+alembic.ini.local
+*.mig
+migrations/**/__pycache__/
+
+#===========================================================================
+# flask
+#===========================================================================
+instance/
+.webassets-cache
+flask_session/
+
+#===========================================================================
+# tests, cobertura y analisis estatico
+#===========================================================================
+.pytest_cache/
+.cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+nosetests.xml
+.tox/
+.nox/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+cython_debug/
+
+#===========================================================================
+# frontend
+#===========================================================================
+node_modules/
+jspm_packages/
+bower_components/
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.pnp.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.parcel-cache/
+.vite/
+.next/
+.nuxt/
+.svelte-kit/
+static/dist/
+static/build/
+*.css.map
+*.js.map
+
+#===========================================================================
+# logs y archivos temporales de ejecucion
+#===========================================================================
+logs/
+*.log
+*.pid
+*.seed
+*.pid.lock
+tmp/
+temp/
+.scratch/
+
+#===========================================================================
+# editores e ides
+#===========================================================================
+.vscode/
+!.vscode/settings.json.example
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.spyderproject
+.spyproject
+.ropeproject
+*.sublime-project
+*.sublime-workspace
+
+#===========================================================================
+# sistemas operativos
+#===========================================================================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+#===========================================================================
+# assets pesados y material de trabajo
+#===========================================================================
+#originales sin optimizar de las ilustraciones, no van al repositorio
+*.psd
+*.xcf
+*.ai
+*.sketch
+*.fig
+assets_fuente/
+*.docx
+*.pptx
+*.xlsx
